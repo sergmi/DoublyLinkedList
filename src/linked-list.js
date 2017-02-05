@@ -2,7 +2,7 @@ const Node = require('./node');
 
 class LinkedList {
     constructor() {
-		this.length=0;	
+		this.length=0;
 	}
 
     append(data) {
@@ -27,6 +27,7 @@ class LinkedList {
 			this._tail=node;
 			this.length=this.length+1;
 		}
+		return this;
 	}
 
     head() {
@@ -50,8 +51,15 @@ class LinkedList {
 		}
 	}
 
-    insertAt(index, data) {
-		var newList=this, elem;
+    insertAt(index, data) {				
+		var newList=new LinkedList, elem=new Node;
+		if(index==0){
+			elem.data=data;
+			this._head=elem;
+			this._tail=elem;
+			this.length=1;
+			return;
+		}
 		var el=this._head;
 		while(index!=el.numb){
 			if(el.numb==0){
@@ -95,11 +103,19 @@ class LinkedList {
 		this._head.data=null;
 		this._tail.data=null;
 		this.length=0;
+		return this;
 	}
 
     deleteAt(index) {
 		var newList=new LinkedList, elem=new Node;
+		if(index==this.length-1){
+			newList._head=new Node;
+			newList._tail=new Node;			
+			return newList;
+		}
+		
 		var el=this._head;
+		
 		while(index!=el.numb){
 			if(el.numb==0){
 				elem=el;
@@ -114,6 +130,7 @@ class LinkedList {
 		
 		while((this.length-2)!=el.numb){
 			elem=elem.next;
+			
 			el=el.next;
 			el.numb=el.numb-1;
 			elem.next=el;			
@@ -124,7 +141,38 @@ class LinkedList {
 	}
 
     reverse() {	
-	
+		var newList= new LinkedList, elem=new Node, element=new Node;
+		var el=this._tail;		
+		elem.data=el.data;
+		elem.next=null;
+		elem.prev=null;
+		elem.numb=0;
+		newList._head=elem;	
+		newList.length=1;		
+		while((this.length)!=(newList.length)){
+			el=el.prev;
+			var newEl=new Node;
+			elem.next=newEl;
+			elem.next.data=el.data;
+			element=elem;
+			elem=elem.next;
+			elem.numb=newList.length;
+			elem.prev=element;			
+			newList.length=newList.length+1;
+		}
+		elem.next=null;
+		newList._tail=elem;
+		
+		if(this.length>1){
+			this._head=newList._head;
+			this._head.next=newList._head.next;
+			this._head.next.next=newList._head.next.next;
+			this._head.next.next.next=newList._head.next.next.next;
+			this._head.next.next.next.next=newList._head.next.next.next.next;
+			this._head.next.next.next.next.next=newList._head.next.next.next.next.next;
+		}
+		this._tail=newList._tail;
+		return this;	
 	}
 
     indexOf(data) {
